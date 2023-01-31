@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>로그인 페이지</title>
+<script	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script	src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
+<link rel="stylesheet" href="css/joinMember.css">
+<script type="text/javascript">
+	function fn_sendFB(sns) {
+	    var thisUrl = document.URL;
+	    var snsTitle = "Study With Meow";
+	    if( sns == 'facebook' ) {
+	        var url = "http://www.facebook.com/sharer/sharer.php?u="+encodeURIComponent(thisUrl);
+	        window.open(url, "", "width=486, height=286");
+	    }
+	    else if( sns == 'twitter' ) {
+	        var url = "http://twitter.com/share?url="+encodeURIComponent(thisUrl)+"&text="+encodeURIComponent(snsTitle);
+	        window.open(url, "tweetPop", "width=486, height=286,scrollbars=yes");
+	    }
+	    else if( sns == 'kakaotalk' ) {
+	        // 사용할 앱의 JavaScript 키 설정
+	        Kakao.init('cf25f253ae7d7050d6cba71caf8133de');
+	        
+	        // 카카오링크 버튼 생성
+	        Kakao.Link.createDefaultButton({
+	            container: '#btnKakao', // HTML에서 작성한 ID값
+	            objectType: 'feed',
+	            content: {
+	            title: "Study With Meow", // 보여질 제목
+	            description: "집에서도 카페처럼! 랜선 카페에 어서 오세요~", // 보여질 설명
+	            imageUrl: thisUrl, // 콘텐츠 URL
+	            link: {
+	                mobileWebUrl: thisUrl,
+	                webUrl: thisUrl
+	            }
+	        }
+	    });
+	}
+	}    
+</script>
+<script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
+<script src="js/main.js"></script>
+</head>
+<body>
+
+	<input type="button" value="로그인" onclick="location.href='/login'">
+	{{^id}}
+		<div>로그아웃 상태입니다.</div>
+	{{/id}}
+	<div>로그인 상태입니다.</div>
+	<input type="button" value="로그아웃" onclick="location.href='/logout'">
+	
+	{{#id}} 		
+		<div align="center">
+			<input type="button" value="내 방 만들기" onclick="location.href='makeRoom'"/>&nbsp;&nbsp;&nbsp;
+			<input type="button" value="방찾기" onclick="findRoom()"/><br/>
+			<input type="button" value="상점" onclick="location.href='shop'"/>&nbsp;&nbsp;&nbsp;
+			<input type="button" value="마이페이지" onclick="location.href='myPage?id={{id}}'"/><br/>
+		</div>
+	{{/id}}
+
+	<div id="roomList">
+		방 목록
+	</div>	
+
+	<div class="col-sm-3" align="right" style="vertical-align: middle;">
+		<span>
+			   <a href="#n" onclick="fn_sendFB('facebook');return false;" class="facebook" target="_self" title="페이스북 새창열림">
+				   <img alt="facebook" src="images/icon-facebook.png">
+			   </a>
+		</span>
+		<span>
+			<a href="#n" onclick="fn_sendFB('twitter');return false;" class="twitter" target="_self" title="트위터 새창열림">
+				   <img alt="twitter" src="images/icon-twitter.png">
+			</a>
+		</span>
+		<span>
+			<a href="#n" id="btnKakao" onclick="fn_sendFB('kakaotalk');return false;" class="kakaotalk" target="_self" title="카카오톡 새창열림">
+				   <img alt="kakao" src="images/icon-kakao.png">
+			</a>
+		</span>
+	</div>
+
+
+</body>
+</html>

@@ -5,48 +5,6 @@ function openProfile(fid, mid) {
 	window.open(url, title, option);
 }
 
-function goChat(nickname) {
-	let chatContent = document.getElementsByName('chatContent')[0].value;
-	let roomIdx = document.getElementById('roomIdx').value;
-	let tbody = document.getElementById('chatTable');
-	tbody.innerHTML = '';
-	
-	$.ajax({
-		type: 'POST',
-		url: 'goChat',
-		data: {
-			chatContent: chatContent,
-			chatNickname: nickname,
-			chatRoomIdx: roomIdx,
-		},
-		success: res => {
-			console.log('요청 성공: ', res);
-	
-			let object = eval('(' + res + ')');
-			let result = object.result;
-			console.log(result)
-			
-			
-			for (let i=0; i<result.length; i++) {
-				let row = tbody.insertRow(i);
-				for (let j=0; j<result[i].length; j++) {
-					let cell = row.insertCell(j);
-					if (j==0) {
-						cell.innerHTML = result[i][j].value + '<br/>';						
-					} else {
-						cell.innerHTML = result[i][j].value;
-					}
-				}
-			}			
-			
-		},
-		error: e => {
-			console.log('요청 실패: ', e);
-		}
-	});
-	
-}
-
 function modalClose() {
 	var modal = document.getElementById('wantFModal');
 	modal.style.display = 'none';
@@ -97,6 +55,9 @@ function addTodo() {
 
 function roomView(roomHost) {
 
-	
 	location.href='roomView?id=' + roomHost;
+}
+
+function findRoom() {
+	document.getElementById('roomList').style.display = 'block'
 }

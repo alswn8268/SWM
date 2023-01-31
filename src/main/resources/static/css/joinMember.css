@@ -1,0 +1,22 @@
+@import url('https://cdn.jsdelivr.net/npm/galmuri@latest/dist/galmuri.css');
+
+/* 공통 */
+* {
+	font-family: 'Galmuri9 ' !important;
+}
+
+a {
+	color: black;
+	text-decoration: none;
+	font-weight: normal;
+}
+
+#roomList {
+	display: none;
+	position: absolute;
+	width: 90%;
+	height: 90%;
+	top: 5%;
+	left: 5%;
+	border: 2px solid black;
+}
