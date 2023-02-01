@@ -46,21 +46,20 @@
 </head>
 <body>
 
-	<input type="button" value="로그인" onclick="location.href='/login'">
-	{{^id}}
+	<div th:if="${id == null}">
+		<input type="button" value="로그인" onclick="location.href='/login'">
 		<div>로그아웃 상태입니다.</div>
-	{{/id}}
-	<div>로그인 상태입니다.</div>
-	<input type="button" value="로그아웃" onclick="location.href='/logout'">
-	
-	{{#id}} 		
+	</div>
+	<div th:if="${id != null}">
+		<div>로그인 상태입니다.</div>
+		<input type="button" value="로그아웃" onclick="location.href='/logout'">
 		<div align="center">
 			<input type="button" value="내 방 만들기" onclick="location.href='makeRoom'"/>&nbsp;&nbsp;&nbsp;
 			<input type="button" value="방찾기" onclick="findRoom()"/><br/>
 			<input type="button" value="상점" onclick="location.href='shop'"/>&nbsp;&nbsp;&nbsp;
-			<input type="button" value="마이페이지" onclick="location.href='myPage?id={{id}}'"/><br/>
+			<input type="button" value="마이페이지" onclick="location.href='myPage?id=${id}'"/><br/>
 		</div>
-	{{/id}}
+	</div>
 
 	<div id="roomList">
 		방 목록

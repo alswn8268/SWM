@@ -3,6 +3,8 @@ package com.study.with.meow.swm.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,12 +21,16 @@ import lombok.ToString;
 public class Member {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(unique = true)
+    private String username;
     
     @Column
     private String password;
 
-    @Column
+    @Column(unique = true)
     private String nickname;
 
     @Column

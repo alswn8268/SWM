@@ -2,17 +2,21 @@ package com.study.with.meow.swm.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import com.study.with.meow.swm.dto.MemberDto;
 import com.study.with.meow.swm.entity.Member;
+import com.study.with.meow.swm.form.MemberJoinForm;
 import com.study.with.meow.swm.repository.MemberRepository;
+import com.study.with.meow.swm.service.MemberService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,6 +26,7 @@ public class MemberController {
     
     @Autowired
     private MemberRepository memberRepository;
+    private MemberService memberService;
     
     @GetMapping("/")
     public String main() {
@@ -47,7 +52,7 @@ public class MemberController {
         log.info("MemberController의 loginOK()");
         
         // 입력한 아이디와 일치하는 정보를 db에서 얻어온다.
-        Member memberEntity = memberRepository.findById(memberDto.getId()).orElse(null);
+        Member memberEntity = memberRepository.findByUsername(memberDto.getUsername()).orElse(null);
 
         // 입력한 비밀번호와 db에서 얻어온 비밀번호가 일치할 경우 로그인 정보를 세션에 저장한다.
         if (memberDto.getPassword().trim().equals(memberEntity.getPassword())) {
@@ -61,7 +66,7 @@ public class MemberController {
             
         }
 
-        return "main";
+        return "redirect:main";
     }
 
     @GetMapping("/logout")
@@ -77,13 +82,34 @@ public class MemberController {
     }
 
     @PostMapping("/joinOK")
-    public String joinOK(MemberDto memberDto) {
+    public String joinOK(MemberDto memberDto, @Valid MemberJoinForm memberJoinForm, BindingResult bindingResult) {
         log.info("MemberController의 joinOK()");
+
+        if (bindingResult.hasErrors()) {
+            return "redirect:joinMember";
+        }
         
-        // Dto를 entity 객체로 변환한다.
-        Member member = memberDto.toEntity();
-        // 변환된 entity 객체를 db에 저장한다.
-        memberRepository.save(member);
+        if (memberJoinForm.getPassword().equals(memberJoinForm.getRepassword())) {
+            bindingResult.rejectValue("repassword", "passwordInCorrect", "비밀번호가 일치하지 않습니다.");
+            return "redirect:joinMember";
+        }
+
+        try {
+            memberService.create(memberJoinForm.getUsername(), memberJoinForm.getPassword(), memberJoinForm.getNickname());
+        } catch (DataIntegrityViolationException e) {
+            e.printStackTrace();
+            bindingResult.reject("signupFailed", "이미 등록된 사용자입니다.");
+            return "redirect:joinMember";
+        }catch(Exception e) {
+            e.printStackTrace();
+            bindingResult.reject("signupFailed", e.getMessage());
+            return "redirect:joinMember";
+        }
+
+        // // Dto를 entity 객체로 변환한다.
+        // Member member = memberDto.toEntity();
+        // // 변환된 entity 객체를 db에 저장한다.
+        // memberRepository.save(member);
 
         return "main";
     }
@@ -95,37 +121,37 @@ public class MemberController {
         return "login/joinMember";
     }
     
-    @ResponseBody
-    @PostMapping("/idExists")
-    public String idExists(MemberDto memberDto) {
-        log.info("MemberController의 idExists()");
+    // @ResponseBody
+    // @PostMapping("/idExists")
+    // public String idExists(MemberDto memberDto) {
+    //     log.info("MemberController의 idExists()");
 
-        // 입력한 아이디와 일치하는 정보를 db에서 얻어온다.
-        Member memberEntity = memberRepository.findById(memberDto.getId()).orElse(null);
-        if (memberEntity != null) {
-            // memberEntity가 null이 아니므로 중복된 id가 있다는 뜻
-            return "1";
-        } else {
-            // memberEntity가 null이므로 중복된 id가 없다는 뜻
-            return "2";
-        }
+    //     // 입력한 아이디와 일치하는 정보를 db에서 얻어온다.
+    //     Member memberEntity = memberRepository.findById(memberDto.getId()).orElse(null);
+    //     if (memberEntity != null) {
+    //         // memberEntity가 null이 아니므로 중복된 id가 있다는 뜻
+    //         return "1";
+    //     } else {
+    //         // memberEntity가 null이므로 중복된 id가 없다는 뜻
+    //         return "2";
+    //     }
 
-    }
+    // }
     
-    @ResponseBody
-    @PostMapping("/nicknameExists")
-    public int nicknameExists(MemberDto memberDto) {
-        log.info("MemberController의 nicknameExists()");
+    // @ResponseBody
+    // @PostMapping("/nicknameExists")
+    // public int nicknameExists(MemberDto memberDto) {
+    //     log.info("MemberController의 nicknameExists()");
 
-        // 입력한 닉네임과 일치하는 정보를 db에서 얻어온다.
-        Member memberEntity = memberRepository.findByNickname(memberDto.getNickname()).orElse(null);
-        if (memberEntity != null) {
-            // memberEntity가 null이 아니므로 중복된 닉네임이 있다는 뜻
-            return 1;
-        } else {
-            // memberEntity가 null이 아니므로 중복된 닉네임이 없다는 뜻
-            return 2;
-        }
-    }
+    //     // 입력한 닉네임과 일치하는 정보를 db에서 얻어온다.
+    //     Member memberEntity = memberRepository.findByNickname(memberDto.getNickname()).orElse(null);
+    //     if (memberEntity != null) {
+    //         // memberEntity가 null이 아니므로 중복된 닉네임이 있다는 뜻
+    //         return 1;
+    //     } else {
+    //         // memberEntity가 null이 아니므로 중복된 닉네임이 없다는 뜻
+    //         return 2;
+    //     }
+    // }
 
 }

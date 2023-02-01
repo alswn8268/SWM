@@ -15,15 +15,16 @@ import lombok.ToString;
 @ToString
 public class MemberDto {
     
-    private String id;
+    private Long id;
+    private String username;
     private String password;
     private String nickname;
-    private String introduce;
-    private String todo;
+    private String introduce = "";
+    private String todo = "";
 
     //	DTO를 Entity로 변환하는 메소드
     public Member toEntity() {
-        return new Member(id, password, nickname, introduce, todo);
+        return new Member(null, username, password, nickname, introduce, todo);
     }
 
 }
