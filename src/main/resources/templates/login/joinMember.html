@@ -15,49 +15,31 @@
 		<input type="button" value="메인으로" onclick="location.href='main'">
 	</div>
 
-	<div style="margin: 20px; padding: 20px;" align="center">
-		<form action="joinOK" method="POST">
-			<table>
-				<tr>
-					<th>아이디</th>
-					<td>
-						<input type="text" placeholder="아이디를 입력해주세요" name="id" onkeyup="alertMsg()">
-					</td>
-					<td>
-						<div id="alertMsg1">흠</div>
-					</td>
-				</tr>
-				<tr>
-					<th>비밀번호</th>
-					<td colspan="2">
-						<input type="password" placeholder="비밀번호를 입력해주세요" name="password" onkeyup="alertMsg()">
-					</td>
-				</tr>
-				<tr>
-					<th>비밀번호 확인</th>
-					<td>
-						<input type="password" placeholder="비밀번호를 다시 입력해주세요" name="repassword" onkeyup="alertMsg()">
-					</td>
-					<td>
-						<div id="alertMsg2">흠</div>
-					</td>
-				</tr>
-				<tr>
-					<th>닉네임</th>
-					<td>
-						<input type="text" placeholder="닉네임을 입력해주세요" name="nickname" onkeyup="alertMsg()">
-					</td>
-					<td>
-						<div id="alertMsg3">흠</div>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="2" align="center">
-						<input type="submit" value="가입">
-					</td>			
-				</tr>
-			</table>
-		</form>
-	</div>
+    <div class="my-3 border-bottom">
+        <div>
+            <h4>회원가입</h4>
+        </div>
+    </div>
+    <form th:action="@{/joinMember}" th:object="${memberJoinForm}" method="post">
+		<div th:replace="~{form_errors :: formErrorsFragment}"></div>
+        <div class="mb-3">
+            <label for="username" class="form-label">사용자ID</label>
+            <input type="text" th:field="*{username}" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">비밀번호</label>
+            <input type="password" th:field="*{password}" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="repassword" class="form-label">비밀번호 확인</label>
+            <input type="password" th:field="*{repassword}" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="nickname" class="form-label">닉네임</label>
+            <input type="text" th:field="*{nickname}" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary">회원가입</button>
+    </form>
+
 </body>
 </html>

@@ -16,14 +16,18 @@
 			<img alt="logo" src="images/img_title.png" style="width: 258px; height: 226px;">
 		</div>	
 	</div>
-	
+	<div th:if="${param.error}">
+		<div class="alert alert-danger">
+			사용자ID 또는 비밀번호를 확인해 주세요.
+		</div>
+	</div>	
 	<div style="margin-top: 30px; margin-bottom: 29px;" align="center">	
-		<form action="loginOK" id="frm" method="POST">
+		<form th:action="@{/login}" id="frm" method="POST">
 			<table style="width: 300px;">
 				<tr>
 					<td align="center">
 						<img src="images/img_loginBox.png" class="inputImg input_box">
-						<input type="text" id="loginId" placeholder="아이디를 입력해주세요" name="id">
+						<input type="text" id="loginId" placeholder="아이디를 입력해주세요" name="username">
 					</td>
 				</tr>
 				<tr>

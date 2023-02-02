@@ -17,12 +17,13 @@ import org.springframework.security.config.annotation.authentication.configurati
 public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        
         http.authorizeHttpRequests().requestMatchers(
                 new AntPathRequestMatcher("/**")).permitAll()
                 .and().csrf().ignoringRequestMatchers(new AntPathRequestMatcher("/h2-console/**"))
                 .and().headers().addHeaderWriter(new XFrameOptionsHeaderWriter(XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN))
-                .and().formLogin().loginPage("/login/login").defaultSuccessUrl("/")
-                .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/login/logout")).logoutSuccessUrl("/").invalidateHttpSession(true)
+                .and().formLogin().loginPage("/login").defaultSuccessUrl("/")
+                .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/").invalidateHttpSession(true)
                 ;
         return http.build();
     }    

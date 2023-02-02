@@ -7,8 +7,7 @@ import com.study.with.meow.swm.entity.Member;
 
 public interface MemberRepository extends JpaRepository<Member, Long>{
 
-    Optional<Member> findById(String id);
     Optional<Member> findByNickname(String nickname);
-    Optional<Member> findByUsername(String username);
+    Optional<Member> findByusername(String username);
 
 }
