@@ -2,7 +2,7 @@
 고양이 캐릭터 랜선 카페
 
 ## 개발 환경
-- Mustache, HTML, CSS, JavaScript, jQuery
+- Thymeleaf, HTML, CSS, JavaScript, jQuery
 - Database: h2 database
 - Programming Language: JAVA 11
 - Framework: SpringBoot 2.7.8
