@@ -7,7 +7,7 @@
 - Programming Language: JAVA 11
 - Framework: SpringBoot 2.7.8
 - IDE : Visual Studio Code
-- Other: lombok, JPA, WebSocket, ...etc
+- Other: Spring Security, lombok, JPA, WebSocket, Ajax, ...etc
 
 ## 주요 기능
 - 캐릭터, 방, BGM 커스터마이징
