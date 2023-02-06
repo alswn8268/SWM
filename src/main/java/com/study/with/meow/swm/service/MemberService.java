@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.study.with.meow.swm.entity.Member;
 import com.study.with.meow.swm.repository.MemberRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,6 +21,7 @@ public class MemberService {
         member.setUsername(username);
         member.setNickname(nickname);
         member.setPassword(passwordEncoder.encode(password));
+        
         this.memberRepository.save(member);
         return member;
     }

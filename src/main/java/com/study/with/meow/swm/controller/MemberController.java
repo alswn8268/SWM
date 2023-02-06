@@ -10,8 +10,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.study.with.meow.swm.dto.MemberDto;
+import com.study.with.meow.swm.entity.Member;
 import com.study.with.meow.swm.form.MemberJoinForm;
 import com.study.with.meow.swm.repository.MemberRepository;
 import com.study.with.meow.swm.service.MemberService;
@@ -66,16 +68,21 @@ public class MemberController {
         }
         
         try {
-            memberService.create(memberJoinForm.getUsername(), memberJoinForm.getPassword(), memberJoinForm.getNickname());
+            // memberService.create(memberJoinForm.getUsername(), memberJoinForm.getPassword(), memberJoinForm.getNickname());
+
+            Member member = new Member();
+            member.setUsername(memberJoinForm.getUsername());
+            member.setNickname(memberJoinForm.getNickname()); 
+            member.setPassword(memberJoinForm.getPassword());
+            this.memberRepository.save(member);
+
         } catch (DataIntegrityViolationException e) {
             e.printStackTrace();
             bindingResult.reject("signupFailed", "이미 등록된 사용자입니다.");
-            System.out.println("4");
             return "redirect:joinMember";
         }catch(Exception e) {
             e.printStackTrace();
             bindingResult.reject("signupFailed", e.getMessage());
-            System.out.println("5");
             return "redirect:joinMember";
         }
 
